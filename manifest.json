@@ -1,0 +1,18 @@
+{
+    "manifest_version": 3,
+    "version": "1.0.0",
+    "name": "dont_block_me_pls",
+    "author": {"email": "canuc80k@gmail.com"},
+    "description": "Block or redirect unwanted website",
+    "icons": {
+    },
+    
+    "background": {"service_worker": "background/service_worker.js"},
+    "action": {
+        "default_title": "dont_block_me_pls",
+        "default_popup": "popup/popup.html"
+    },
+    "permissions": [
+    ],
+    "host_permissions": ["https://*/*", "http://*/*"]
+}
