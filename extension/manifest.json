@@ -1,0 +1,7 @@
+{
+    "name": "dont_block_me_pls",
+    "description": "Block or redirect unwanted website",
+    "homepage_url": "https://github.com/Canuc80k/dont_block_me_pls",
+    "version": "1.0.0",
+    "manifest_version": 3
+}
