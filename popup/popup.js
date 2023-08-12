@@ -1,25 +1,68 @@
+let fontSize = 1.2;
+
+let _buffer;
+const countLines = (textarea) => {
+    if (_buffer == null) {
+        _buffer = document.createElement('textarea');
+        _buffer.style.border = 'none';
+        _buffer.style.height = '0';
+        _buffer.style.overflow = 'hidden';
+        _buffer.style.padding = '0';
+        _buffer.style.position = 'absolute';
+        _buffer.style.left = '0';
+        _buffer.style.top = '0';
+        _buffer.style.zIndex = '-1';
+        document.body.appendChild(_buffer);
+    }
+
+    var cs = window.getComputedStyle(textarea);
+    var pl = parseInt(cs.paddingLeft);
+    var pr = parseInt(cs.paddingRight);
+    var lh = parseInt(cs.lineHeight);
+
+    if (isNaN(lh)) lh = parseInt(cs.fontSize);
+
+    _buffer.style.width = (textarea.clientWidth - pl - pr) + 'px';
+
+    _buffer.style.font = cs.font;
+    _buffer.style.letterSpacing = cs.letterSpacing;
+    _buffer.style.whiteSpace = cs.whiteSpace;
+    _buffer.style.wordBreak = cs.wordBreak;
+    _buffer.style.wordSpacing = cs.wordSpacing;
+    _buffer.style.wordWrap = cs.wordWrap;
+
+    _buffer.value = textarea.value;
+
+    var result = Math.floor(_buffer.scrollHeight / lh);
+    if (result == 0) result = 1;
+    return result;
+}
+
 let currID = 0;
 
 let createConsoleLineElement = (id) => {
-    let result = "<div class=\"console-line\">";
-    result += "<div class=\"console-begin-char\">&gt; </div>"
-    result += "<input id=\"" + id + "\" class=\"console-text\" type=\"text\"></input>";
-    result += "</div>"
-
-    return result;
+    return "<div class=\"console-line\"><div class=\"console-begin-char\">&gt;&nbsp;&nbsp;</div><textarea id=\"" + id + "\" class=\"console-text\"></textarea></div>";
 }
 
 window.onload = (() => {
     $("#console").append(createConsoleLineElement(currID));
-    $("#" + currID).focus();
+    setTimeout(() => {$("#" + currID).focus();});
+    $("#" + currID).bind('input propertychange', (e) => {
+        $("#" + currID).css("height", countLines(e.target) * fontSize + "rem");
+    });
 });
 
 $(document).on('keypress', (e) => {
-    if(e.which == 13) {
+    if (e.which == 13) {
         $("#" + currID).blur();
-        $("#console").append(createConsoleLineElement(++ currID));
-        $("#" + currID).focus();
+        $('#' + currID).prop('readonly', true);
+        
+        currID = currID + 1;
+        $("#console").append(createConsoleLineElement(currID));
+        setTimeout(() => {$("#" + currID).focus();});
 
-        console.log($('body').height());
+        $("#" + currID).bind('input propertychange', (e) => {
+            $("#" + currID).css("height", countLines(e.target) * fontSize + "rem");
+        });
     }
 });

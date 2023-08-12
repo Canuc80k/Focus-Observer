@@ -9,16 +9,31 @@ html {
     overflow: auto;
 }
 
+#console::-webkit-scrollbar {
+    display: none;
+}
+
 .console-begin-char {
-    display: inline;
+    vertical-align: top;
+    display: inline-block;
     color: white;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 0.75rem;
+    padding-top: 0.25rem;
 }
 
 .console-text {
+    width: 12rem;
+    height: 1rem;
+
     color: #188d77;
     font-family: 'VT323', monospace;
-    font-size: 1rem;
-    border: none;
-    outline: none;
+    font-size: 1.2rem;
     background-color: #232627;
+
+    outline: none;
+    border: none;
+    box-shadow: none;
+    resize: none;
+    overflow-y: hidden;
 }
