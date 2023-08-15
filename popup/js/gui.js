@@ -38,9 +38,6 @@ const countLines = (textarea) => {
     return result;
 }
 
-let currID = 0;
-let currRespondID = 0;
-
 let createConsoleLineElement = (id) => {
     return "<div class=\"console-line\"><div class=\"console-begin-char\">&gt;&nbsp;&nbsp;</div><textarea id=\"" + id + "\" class=\"console-text\"></textarea></div>";
 }
@@ -48,11 +45,3 @@ let createConsoleLineElement = (id) => {
 let createRespondConsoleLineElement = (id) => {
     return "<div class=\"console-line\"><textarea class=\"console-text\">respond :D</textarea></div>";
 }
-
-window.onload = (() => {
-    $("#console").append(createConsoleLineElement(currID));
-    setTimeout(() => {$("#" + currID).focus();});
-    $("#" + currID).bind('input propertychange', (e) => {
-        $("#" + currID).css("height", countLines(e.target) * fontSize + "rem");
-    });
-});

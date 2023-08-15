@@ -17,6 +17,8 @@
         "default_popup": "popup/popup.html"
     },
     "permissions": [
+        "storage",
+        "nativeMessaging"
     ],
     "host_permissions": ["<all_urls>"]
 }

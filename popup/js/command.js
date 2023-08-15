@@ -1,20 +1,26 @@
 const createNewCommandInput = () => {
-    $("#" + currID).blur();
-    $('#' + currID).prop('readonly', true);
-    
-    currID = currID + 1;
-    $("#console").append(createConsoleLineElement(currID));
-    setTimeout(() => {$("#" + currID).focus();});
+    let currID = requestList.length;
+    let newID = currID + 1;
+    let currInputObject = $("#" + currID);
 
-    $("#" + currID).bind('input propertychange', (e) => {
-        $("#" + currID).css("height", countLines(e.target) * fontSize + "rem");
+    currInputObject.blur();
+    currInputObject.prop('readonly', true);
+    requestList.push(currInputObject.val());
+    chrome.storage.sync.set({"requestList": {}, "respondList": {}}, () => {});
+    
+    $("#console").append(createConsoleLineElement(newID));
+    
+    let newInputObject = $("#" + newID);
+    setTimeout(() => {newInputObject.focus();});
+    newInputObject.bind('input propertychange', (e) => {
+        newInputObject.css("height", countLines(e.target) * fontSize + "rem");
     });
 }
 
 const handleCommand = () => {
-    currRespondID = currRespondID + 1;
-    $("#console").append(createRespondConsoleLineElement(currRespondID));
-    setTimeout(() => {$("#" + curcurrRespondIDrID).focus();});
+    // currRespondID = currRespondID + 1;
+    // $("#console").append(createRespondConsoleLineElement(currRespondID));
+    // setTimeout(() => {$("#" + currRespondID).focus();});
 }
 
 $(document).on('keypress', (e) => {
