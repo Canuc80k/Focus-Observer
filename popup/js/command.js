@@ -1,3 +1,10 @@
+const createCommandInput = (currID, text) => {
+    $("#console").append(createConsoleLineElement(currID));
+    let currInputObject = $("#" + currID);
+    currInputObject.prop('readonly', true);
+    currInputObject.text(text);
+}
+
 const createNewCommandInput = () => {
     let currID = requestList.length;
     let newID = currID + 1;
@@ -6,7 +13,10 @@ const createNewCommandInput = () => {
     currInputObject.blur();
     currInputObject.prop('readonly', true);
     requestList.push(currInputObject.val());
-    chrome.storage.sync.set({"requestList": {}, "respondList": {}}, () => {});
+    console.log(requestList);
+    chrome.storage.sync.set({"requestList": requestList, "respondList": {}}, () => {
+        console.log("Asd");
+    });
     
     $("#console").append(createConsoleLineElement(newID));
     
