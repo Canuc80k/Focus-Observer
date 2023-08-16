@@ -15,17 +15,23 @@ const createRequestLine = (id) => {
 }
 
 const createRespondLine = (id) => {
-    return "<div class=\"console-line\"><textarea class=\"console-text\">respond :D</textarea></div>";
+    return "<div class=\"console-line\"><textarea id=\"r" + id + "\" class=\"respond-console-text\">respond :D" + id + "</textarea></div>";
 }
 
 const archiveCurrentLine = () => {
     let currID = requestList.length;
-    let currInputObject = $("#" + currID);
+    let requestLine = $("#" + currID);
     
-    currInputObject.blur();
-    currInputObject.prop('readonly', true);
-    requestList.push(currInputObject.val());
-    requestLinesHeight.push(countTextareaLine(currInputObject.get(0)) * fontSize);
+    requestLine.blur();
+    requestLine.prop('readonly', true);
+    requestList.push(requestLine.val());
+    requestLinesHeight.push(countTextareaLine(requestLine.get(0)) * fontSize);
+
+    let currRID = respondList.length;
+    let respondLine = $("#r" + currRID);
+    respondList.push(respondLine.val());
+    respondLinesHeight.push(countTextareaLine(respondLine.get(0)) * fontSize);
+
     chrome.storage.sync.set({
         "requestList": requestList, 
         "respondList": respondList,
@@ -36,21 +42,38 @@ const archiveCurrentLine = () => {
 
 const addOldRequestLine = (id, text, height) => {
     $console.append(createRequestLine(id));
-    let inputObject = $("#" + id);
-    inputObject.prop('readonly', true);
-    inputObject.text(text);
-    console.log(id + " " + countTextareaLine(inputObject.get(0)));
-    inputObject.css("height", height + "rem");
+    let resquestLine = $("#" + id);
+    resquestLine.prop('readonly', true);
+    resquestLine.text(text);
+    resquestLine.css("height", height + "rem");
+}
+
+const addOldRespondLine = (id, text, height) => {
+    $console.append(createRespondLine(id));
+    let respondLine = $("#r" + id);
+    respondLine.text(text);
+    respondLine.css("height", height + "rem");
 }
 
 const addNewRequestLine = () => {
     let newID = requestList.length;
     $console.append(createRequestLine(newID));
-    let newInputObject = $("#" + newID);
+    let requestLine = $("#" + newID);
     
-    setTimeout(() => {newInputObject.focus();});
-    newInputObject.bind('input propertychange', (e) => {
-        newInputObject.css("height", countTextareaLine(e.target) * fontSize + "rem");
+    setTimeout(() => {requestLine.focus();});
+    requestLine.bind('input propertychange', (e) => {
+        requestLine.css("height", countTextareaLine(e.target) * fontSize + "rem");
+    });
+}
+
+const addNewRespondLine = () => {
+    let newID = respondList.length;
+    $console.append(createRespondLine(newID));
+    let respondLine = $("#r" + newID);
+    respondLine.prop('readonly', true);
+
+    respondLine.bind('input propertychange', (e) => {
+        respondLine.css("height", countTextareaLine(e.target) * fontSize + "rem");
     });
 }
 
@@ -64,6 +87,8 @@ const addCurrentRequestLine = () => {
 }
 
 const buildOldGUI = () => { 
-    for (let i = 0; i < requestList.length; i ++)
+    for (let i = 0; i < requestList.length; i ++) {
         addOldRequestLine(i, requestList[i], requestLinesHeight[i]);
+        addOldRespondLine(i, respondList[i], respondLinesHeight[i]);
+    }
 }

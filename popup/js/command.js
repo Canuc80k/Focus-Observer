@@ -1,7 +1,5 @@
 const handleCommand = () => {
-    // currRespondID = currRespondID + 1;
-    // $("#console").append(createRespondConsoleLineElement(currRespondID));
-    // setTimeout(() => {$("#" + currRespondID).focus();});
+    addNewRespondLine();
 }
 
 $(document).on('keypress', (e) => {
