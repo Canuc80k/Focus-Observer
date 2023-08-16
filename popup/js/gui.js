@@ -35,7 +35,7 @@ const archiveCurrentLine = () => {
     }
     isAlreadyClearConsole = false;
 
-    chrome.storage.sync.set({
+    chrome.storage.local.set({
         "requestList": requestList, 
         "respondList": respondList,
         "requestLinesHeight": requestLinesHeight,
@@ -69,7 +69,7 @@ const addNewRequestLine = () => {
         $requestLine.css("height", countTextareaLine(e.target) * fontSize + "rem");
        
         currentRequestText = $requestLine.val();
-        chrome.storage.sync.set({"currentRequestText": currentRequestText}, () => {});
+        chrome.storage.local.set({"currentRequestText": currentRequestText}, () => {});
     });
 }
 
@@ -91,7 +91,7 @@ const addCurrentRequestLine = (text) => {
 
     $currRequestLine.bind('input propertychange', (e) => {
         currentRequestText = $currRequestLine.val();
-        chrome.storage.sync.set({"currentRequestText": currentRequestText}, () => {});
+        chrome.storage.local.set({"currentRequestText": currentRequestText}, () => {});
 
         $currRequestLine.css("height", countTextareaLine(e.target) * fontSize + "rem");
     });

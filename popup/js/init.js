@@ -11,7 +11,7 @@ const checkDataAvailable = (data, dataType) => {
 
 window.onload = () => {
     $console = $("#console");
-    chrome.storage.sync.get().then((data) => {
+    chrome.storage.local.get().then((data) => {
         currentRequestText = "";
         requestList = [], respondList = [], requestLinesHeight = [], respondLinesHeight = [];
 
