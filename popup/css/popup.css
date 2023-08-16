@@ -1,11 +1,11 @@
 html {
     background: #232627;
-    height: 18rem;
-    width: 15rem;
+    height: 20rem;
+    width: 16rem;
 }
 
 #console {
-    max-height: 18rem;
+    max-height: 19rem;
     overflow: auto;
 }
 
@@ -42,7 +42,7 @@ html {
     width: 12rem;
     height: 1.2rem;
 
-    color: red;
+    color: #962a2a;
     font-family: 'VT323', monospace;
     font-size: 1.2rem;
     background-color: #232627;

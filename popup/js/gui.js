@@ -15,22 +15,25 @@ const createRequestLine = (id) => {
 }
 
 const createRespondLine = (id) => {
-    return "<div class=\"console-line\"><textarea id=\"r" + id + "\" class=\"respond-console-text\">respond :D " + id + "</textarea></div>";
+    return "<div class=\"console-line\"><textarea id=\"r" + id + "\" class=\"respond-console-text\" readonly=\"true\"></textarea></div>";
 }
 
 const archiveCurrentLine = () => {
-    let currID = requestList.length;
-    let $requestLine = $("#" + currID);
-    
-    $requestLine.blur();
-    $requestLine.prop('readonly', true);
-    requestList.push($requestLine.val());
-    requestLinesHeight.push(countTextareaLine($requestLine.get(0)) * fontSize);
+    if (!isAlreadyClearConsole) {
+        let currID = requestList.length;
+        let $requestLine = $("#" + currID);
 
-    let currRID = respondList.length;
-    let $respondLine = $("#r" + currRID);
-    respondList.push($respondLine.val());
-    respondLinesHeight.push(countTextareaLine($respondLine.get(0)) * fontSize);
+        $requestLine.blur();
+        $requestLine.prop('readonly', true);
+        requestList.push($requestLine.val());
+        requestLinesHeight.push(countTextareaLine($requestLine.get(0)) * fontSize);
+
+        let currRID = respondList.length;
+        let $respondLine = $("#r" + currRID);
+        respondList.push($respondLine.val());
+        respondLinesHeight.push(countTextareaLine($respondLine.get(0)) * fontSize);
+    }
+    isAlreadyClearConsole = false;
 
     chrome.storage.sync.set({
         "requestList": requestList, 
@@ -66,16 +69,16 @@ const addNewRequestLine = () => {
         $requestLine.css("height", countTextareaLine(e.target) * fontSize + "rem");
        
         currentRequestText = $requestLine.val();
-        console.log(currentRequestText);    
         chrome.storage.sync.set({"currentRequestText": currentRequestText}, () => {});
     });
 }
 
-const addNewRespondLine = () => {
+const addNewRespondLine = (text) => {
     let newID = respondList.length;
     $console.append(createRespondLine(newID));
     let $respondLine = $("#r" + newID);
     $respondLine.prop('readonly', true);
+    $respondLine.val(text);
 
     $respondLine.css("height", countTextareaLine($respondLine.get(0)) * fontSize + "rem");
 }
@@ -88,7 +91,6 @@ const addCurrentRequestLine = (text) => {
 
     $currRequestLine.bind('input propertychange', (e) => {
         currentRequestText = $currRequestLine.val();
-        console.log(currentRequestText);    
         chrome.storage.sync.set({"currentRequestText": currentRequestText}, () => {});
 
         $currRequestLine.css("height", countTextareaLine(e.target) * fontSize + "rem");
@@ -101,3 +103,11 @@ const buildOldGUI = () => {
         addOldRespondLine(i, respondList[i], respondLinesHeight[i]);
     }
 }
+
+$(document).on('keypress', (e) => {
+    if (e.which == 13) {
+        handleCommand();
+        archiveCurrentLine();
+        addNewRequestLine();
+    }
+});
