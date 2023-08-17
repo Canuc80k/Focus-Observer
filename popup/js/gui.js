@@ -40,7 +40,8 @@ const archiveCurrentLine = () => {
         "respondList": respondList,
         "requestLinesHeight": requestLinesHeight,
         "respondLinesHeight": respondLinesHeight,
-        "currentRequestText": ""
+        "currentRequestText": "",
+        "autoClearConsoleLimit": autoClearConsoleLimit
     }, () => {});
 }
 
