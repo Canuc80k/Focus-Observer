@@ -1,7 +1,7 @@
 let $console;
 let requestList, respondList, requestLinesHeight, respondLinesHeight, currentRequestText;
 let isAlreadyClearConsole = false;
-let autoClearConsoleLimit = Number.MAX_VALUE;
+let autoClearConsoleLimit = Number.MAX_SAFE_INTEGER;
 
 const checkDataAvailable = (data, dataType) => {
     if (data != undefined && data.constructor.name == dataType) return true;

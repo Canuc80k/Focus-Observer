@@ -20,6 +20,8 @@ const createRespondLine = (id) => {
 
 const archiveCurrentLine = () => {
     if (!isAlreadyClearConsole) {
+        currentRequestText = "";
+        
         let currID = requestList.length;
         let $requestLine = $("#" + currID);
 
