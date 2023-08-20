@@ -26,7 +26,16 @@ const handleCommand = () => {
             blockCurrentWebsite();
             return;
         }
+
+        addNewRespondLine("block arguments aren't available");
+        return;
     }
 
+    if (command[0] == "unblock") {
+        if (command.length == 2) {
+            if (command[1] == "-a" || command[1] == "-all") unblockAllWebsite();
+            return;
+        }
+    }
     addNewRespondLine("Guess nothing to do here...");
 }

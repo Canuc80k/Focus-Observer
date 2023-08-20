@@ -1,6 +1,6 @@
 const blockCurrentWebsite = () => {
     chrome.tabs.query({'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT}, (tabs) => {
-        let url = tabs[0].url;
+        let url = new URL(tabs[0].url).hostname;
 
         chrome.declarativeNetRequest.updateDynamicRules({
             addRules:[{
@@ -18,4 +18,12 @@ const blockCurrentWebsite = () => {
     });
     
     addNewRespondLine("Block success !!");
+}
+
+const unblockAllWebsite = () => {
+    chrome.declarativeNetRequest.getDynamicRules(previousRules => {
+        const previousRuleIds = previousRules.map(rule => rule.id);
+        chrome.declarativeNetRequest.updateDynamicRules({removeRuleIds: previousRuleIds});
+    });
+    addNewRespondLine("Unblock all website");
 }

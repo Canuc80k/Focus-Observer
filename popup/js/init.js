@@ -4,11 +4,6 @@ let isAlreadyClearConsole = false;
 let autoClearConsoleLimit = Number.MAX_SAFE_INTEGER;
 let blockWebsite;
 
-// chrome.declarativeNetRequest.getDynamicRules(previousRules => {
-//     const previousRuleIds = previousRules.map(rule => rule.id);
-//     chrome.declarativeNetRequest.updateDynamicRules({removeRuleIds: previousRuleIds});
-// });
-
 const checkDataAvailable = (data, dataType) => {
     if (data != undefined && data.constructor.name == dataType) return true;
     return false;
