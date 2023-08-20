@@ -43,7 +43,8 @@ const archiveCurrentLine = () => {
         "requestLinesHeight": requestLinesHeight,
         "respondLinesHeight": respondLinesHeight,
         "currentRequestText": "",
-        "autoClearConsoleLimit": autoClearConsoleLimit
+        "autoClearConsoleLimit": autoClearConsoleLimit,
+        "blockWebsite": {}
     }, () => {});
 }
 

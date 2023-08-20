@@ -18,7 +18,8 @@
     },
     "permissions": [
         "storage",
-        "nativeMessaging"
+        "declarativeNetRequest",
+        "tabs"
     ],
     "host_permissions": ["<all_urls>"]
 }

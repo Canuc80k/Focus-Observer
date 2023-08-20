@@ -2,6 +2,12 @@ let $console;
 let requestList, respondList, requestLinesHeight, respondLinesHeight, currentRequestText;
 let isAlreadyClearConsole = false;
 let autoClearConsoleLimit = Number.MAX_SAFE_INTEGER;
+let blockWebsite;
+
+// chrome.declarativeNetRequest.getDynamicRules(previousRules => {
+//     const previousRuleIds = previousRules.map(rule => rule.id);
+//     chrome.declarativeNetRequest.updateDynamicRules({removeRuleIds: previousRuleIds});
+// });
 
 const checkDataAvailable = (data, dataType) => {
     if (data != undefined && data.constructor.name == dataType) return true;
@@ -27,6 +33,7 @@ window.onload = () => {
     chrome.storage.local.get().then((data) => {
         currentRequestText = "";
         requestList = [], respondList = [], requestLinesHeight = [], respondLinesHeight = [];
+        blockWebsite = [];
 
         if (checkDataAvailable(data.requestList, "Array")) requestList = data.requestList;
         if (checkDataAvailable(data.respondList, "Array")) respondList = data.respondList;
@@ -34,7 +41,7 @@ window.onload = () => {
         if (checkDataAvailable(data.respondLinesHeight, "Array")) respondLinesHeight = data.respondLinesHeight;
         if (checkDataAvailable(data.currentRequestText, "String")) currentRequestText = data.currentRequestText; 
         if (checkDataAvailable(data.autoClearConsoleLimit, "Number")) autoClearConsoleLimit = data.autoClearConsoleLimit;
-
+        if (checkDataAvailable(data.blockWebsite, "Array")) blockWebsite = data.blockWebsite;
         autoClearExecute();
 
         console.log(requestList);
@@ -42,6 +49,7 @@ window.onload = () => {
         console.log(requestLinesHeight);
         console.log(respondLinesHeight);
         console.log(currentRequestText);
+        console.log(blockWebsite);
 
         if (requestList.length) buildOldGUI();
         addCurrentRequestLine(currentRequestText);
