@@ -1,4 +1,4 @@
-const handleCommand = () => {
+const handleCommand = async () => {
     let command = currentRequestText.trim().split(" ");
     
     if (command[0] == "clear" && command.length == 1) {
@@ -23,7 +23,7 @@ const handleCommand = () => {
 
     if (command[0] == "block") {
         if (command.length == 1) {
-            blockCurrentWebsite();
+            await blockCurrentWebsite();
             return;
         }
 
@@ -39,8 +39,10 @@ const handleCommand = () => {
 
     if (command[0] == "unblock") {
         if (command.length == 2) {
-            if (command[1] == "-a" || command[1] == "-all") unblockAllWebsite();
-            return;
+            if (command[1] == "-a" || command[1] == "-all") {
+                await unblockAllWebsite();
+                return;
+            }
         }
     }
     addNewRespondLine("Guess nothing to do here...");

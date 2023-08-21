@@ -1,28 +1,28 @@
-const blockCurrentWebsite = () => {
-    chrome.tabs.query({'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT}, (tabs) => {
-        let url = new URL(tabs[0].url).hostname;
-        if (blockWebsite.includes(url)) {
-            addNewRespondLine("This domain has been blocked before");
-            return;
-        }
-
-        blockWebsite.push(url);
-        console.log(blockWebsite);
-        chrome.storage.local.set({"blockWebsite": blockWebsite}, () => {
-            chrome.declarativeNetRequest.updateDynamicRules({
-                addRules:[{
-                    "id": blockWebsite.length + 1,
-                    "priority": 1,
-                    "action": {"type": "block"},
-                    "condition": {"urlFilter": url, "resourceTypes": ["main_frame"]}}
-                ],
-                removeRuleIds: [blockWebsite.length + 1],
-            }, () => {
-                chrome.tabs.reload(tabs[0].id);
-            })    
-        });
-        addNewRespondLine("Block success !!");
+const blockCurrentWebsite = async () => {
+    const tabData = await chrome.tabs.query({'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT});
+    console.log(tabData[0].url);
+    let domain = new URL(tabData[0].url).hostname;
+    
+    if (blockWebsite.includes(domain)) {
+        addNewRespondLine("This domain has been blocked before");
+        return;
+    }
+    
+    blockWebsite.push(domain);
+    await chrome.storage.local.set({"blockWebsite": blockWebsite});
+    await chrome.declarativeNetRequest.updateDynamicRules({
+        addRules:[{
+                "id": blockWebsite.length + 1,
+                "priority": 1,
+                "action": {"type": "block"},
+                "condition": {"urlFilter": domain, "resourceTypes": ["main_frame"]}}
+        ],
+        removeRuleIds: [blockWebsite.length + 1],
     });
+
+    await chrome.tabs.reload();
+      
+    addNewRespondLine("Block success !!");
 }
 
 const showBlockWebsite = () => {
@@ -39,10 +39,12 @@ const showBlockWebsite = () => {
     addNewRespondLine(respondText);
 } 
 
-const unblockAllWebsite = () => {
-    chrome.declarativeNetRequest.getDynamicRules(previousRules => {
-        const previousRuleIds = previousRules.map(rule => rule.id);
-        chrome.declarativeNetRequest.updateDynamicRules({removeRuleIds: previousRuleIds});
-    });
+const unblockAllWebsite = async () => {
+    let previousRules = await chrome.declarativeNetRequest.getDynamicRules();
+    const previousRuleIds = previousRules.map(rule => rule.id);
+    await chrome.declarativeNetRequest.updateDynamicRules({removeRuleIds: previousRuleIds});
+    blockWebsite = [];
+    await chrome.storage.local.set({"blockWebsite": blockWebsite});
+
     addNewRespondLine("Unblock all website");
 }

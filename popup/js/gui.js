@@ -43,8 +43,7 @@ const archiveCurrentLine = () => {
         "requestLinesHeight": requestLinesHeight,
         "respondLinesHeight": respondLinesHeight,
         "currentRequestText": "",
-        "autoClearConsoleLimit": autoClearConsoleLimit,
-        "blockWebsite": {}
+        "autoClearConsoleLimit": autoClearConsoleLimit
     }, () => {});
 }
 
@@ -108,9 +107,9 @@ const buildOldGUI = () => {
     }
 }
 
-$(document).on('keypress', (e) => {
+$(document).on('keypress', async (e) => {
     if (e.which == 13) {
-        handleCommand();
+        await handleCommand();
         archiveCurrentLine();
         addNewRequestLine();
     }
