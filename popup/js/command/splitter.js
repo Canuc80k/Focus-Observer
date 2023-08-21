@@ -27,6 +27,12 @@ const handleCommand = () => {
             return;
         }
 
+        if (command.length == 2) {
+            if (command[1] == "-s" || command == "-show") {
+                showBlockWebsite();
+                return;
+            }
+        }
         addNewRespondLine("block arguments aren't available");
         return;
     }
