@@ -21,7 +21,6 @@ const blockCurrentWebsite = async () => {
     });
 
     await chrome.tabs.reload();
-      
     addNewRespondLine("Block success !!");
 }
 

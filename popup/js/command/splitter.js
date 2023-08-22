@@ -22,13 +22,12 @@ const handleCommand = async () => {
     }
 
     if (command[0] == "block") {
-        if (command.length == 1) {
-            await blockCurrentWebsite();
-            return;
-        }
-
         if (command.length == 2) {
-            if (command[1] == "-s" || command == "-show") {
+            if (command[1] == "-c" || command[1] == "-current") {
+                await blockCurrentWebsite();
+                return;
+            }
+            if (command[1] == "-s" || command[1] == "-show") {
                 showBlockWebsite();
                 return;
             }

@@ -6,6 +6,7 @@ const countTextareaLine = (textarea) => {
     if (isNaN(lh)) lh = parseInt(cs.fontSize);
     
     let res = Math.floor(textarea.scrollHeight / lh);
+    console.log(textarea.scrollHeight + " " + lh);
     if (res == 0) res = 1;
     return res;
 }
@@ -24,10 +25,14 @@ const archiveCurrentLine = () => {
         
         let currID = requestList.length;
         let $requestLine = $("#" + currID);
+        let lastRequestLineText = $requestLine.val();
+        if (lastRequestLineText.at(-1) == '\n') lastRequestLineText.slice(0, -1);
+        console.log(lastRequestLineText);
+        console.log($requestLine.val());
 
         $requestLine.blur();
         $requestLine.prop('readonly', true);
-        requestList.push($requestLine.val());
+        requestList.push(lastRequestLineText);
         requestLinesHeight.push(countTextareaLine($requestLine.get(0)) * fontSize);
 
         let currRID = respondList.length;
@@ -109,6 +114,7 @@ const buildOldGUI = () => {
 
 $(document).on('keypress', async (e) => {
     if (e.which == 13) {
+        e.preventDefault();
         await handleCommand();
         archiveCurrentLine();
         addNewRequestLine();
