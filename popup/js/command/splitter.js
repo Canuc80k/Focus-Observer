@@ -51,6 +51,14 @@ const handleCommand = async () => {
                 await unblockAllWebsite();
                 return;
             }
+            if (command[1] == "-s" || command[1] == "-show") {
+                showBlockWebsite();
+                return;
+            }
+            if (command[1][0] != '-') {
+                await unblockSpecificWebsite(command[1]);
+                return;
+            }
         }
         addNewRespondLine("unblock arguments aren't available");
         return;

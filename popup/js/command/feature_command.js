@@ -66,6 +66,66 @@ const showBlockWebsite = () => {
     addNewRespondLine(respondText);
 } 
 
+const isPositiveNumber = (value) => {
+    return /^\d+$/.test(value);
+}
+
+const unblockSpecificWebsite = async (rawData) => {
+    if (isPositiveNumber(rawData)) {
+        if (rawData - 1 >= blockWebsite.length) {
+            addNewRespondLine("Blocked website with index " + rawData + " doesn't exit");
+            return;
+        }
+        
+        const id = rawData - 1; 
+        blockWebsite.splice(id, 1);
+        await chrome.storage.local.set({"blockWebsite": blockWebsite});
+        
+        let previousRules = await chrome.declarativeNetRequest.getDynamicRules();
+        const previousRuleIds = previousRules.map(rule => rule.id);
+        await chrome.declarativeNetRequest.updateDynamicRules({removeRuleIds: previousRuleIds});
+
+        for (let i = 0; i < blockWebsite.length; i ++)
+            await chrome.declarativeNetRequest.updateDynamicRules({
+                addRules:[{
+                    "id": i + 1,
+                    "priority": 1,
+                    "action": {"type": "block"},
+                    "condition": {"urlFilter": blockWebsite[i], "resourceTypes": ["main_frame"]}}
+                ],
+                removeRuleIds: [i + 1],
+            });
+
+        addNewRespondLine("Unblock website with index " + rawData + " successfully");
+        return;
+    }
+
+    if (!blockWebsite.includes(rawData)) {
+        addNewRespondLine(rawData + " isn't in your block website list");
+        return;
+    }
+
+    blockWebsite = blockWebsite.filter(x => x !== rawData);
+    await chrome.storage.local.set({"blockWebsite": blockWebsite});
+        
+    let previousRules = await chrome.declarativeNetRequest.getDynamicRules();
+    const previousRuleIds = previousRules.map(rule => rule.id);
+    await chrome.declarativeNetRequest.updateDynamicRules({removeRuleIds: previousRuleIds});
+
+    for (let i = 0; i < blockWebsite.length; i ++)
+        await chrome.declarativeNetRequest.updateDynamicRules({
+            addRules:[{
+                "id": i + 1,
+                "priority": 1,
+                "action": {"type": "block"},
+                "condition": {"urlFilter": blockWebsite[i], "resourceTypes": ["main_frame"]}}
+            ],
+            removeRuleIds: [i + 1],
+        });
+
+    addNewRespondLine("Unblock website " + rawData + " successfully");
+}
+
 const unblockAllWebsite = async () => {
     let previousRules = await chrome.declarativeNetRequest.getDynamicRules();
     const previousRuleIds = previousRules.map(rule => rule.id);
