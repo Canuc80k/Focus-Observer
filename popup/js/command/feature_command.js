@@ -47,3 +47,31 @@ const unblockAllWebsite = async () => {
 
     addNewRespondLine("Unblock all website");
 }
+
+const showReloadCommands = () => {
+
+}
+
+const reloadCurrentPage = async () => {
+    await chrome.tabs.reload();
+    addNewRespondLine("Page reloaded");
+}
+
+const reloadBlockPage = async () => {
+    const tabData = await chrome.tabs.query({});
+    for (let i = 0; i < tabData.length; i ++) {
+        console.log(new URL(tabData[i].url).hostname.toString());
+        if (blockWebsite.includes(new URL(tabData[0].url).hostname.toString()) || blockUrl.includes(tabData[0].url).toString()) 
+            await chrome.tabs.reload(tabData[i].id);
+    }
+
+    addNewRespondLine("Blocked page reloaded");
+}
+
+const reloadAllPage = async () => {
+    const tabData = await chrome.tabs.query({});
+    for (let i = 0; i < tabData.length; i ++) 
+        await chrome.tabs.reload(tabData[i].id);
+    
+    addNewRespondLine("All page reloaded");
+}

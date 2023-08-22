@@ -43,6 +43,31 @@ const handleCommand = async () => {
                 return;
             }
         }
+        addNewRespondLine("unblock arguments aren't available");
+        return;
+    }
+
+    if (command[0] == "reload") {
+        if (command.length == 1) {
+            showReloadCommands();
+            return;
+        }
+        if (command.length == 2) {
+            if (command[1] == "-c" || command[1] == "-current") {
+                await reloadCurrentPage();
+                return;
+            }
+            if (command[1] == "-b" || command[1] == "-block") {
+                await reloadBlockPage();
+                return;
+            }
+            if (command[1] == "-a" || command[1] == "-all") {
+                await reloadAllPage();
+                return;
+            }
+        }
+        addNewRespondLine("reload arguments aren't available");
+        return;
     }
     addNewRespondLine("Guess nothing to do here...");
 }

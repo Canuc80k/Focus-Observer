@@ -2,7 +2,7 @@ let $console;
 let requestList, respondList, requestLinesHeight, respondLinesHeight, currentRequestText;
 let isAlreadyClearConsole = false;
 let autoClearConsoleLimit = Number.MAX_SAFE_INTEGER;
-let blockWebsite;
+let blockWebsite, blockUrl;
 
 const checkDataAvailable = (data, dataType) => {
     if (data != undefined && data.constructor.name == dataType) return true;
@@ -28,7 +28,7 @@ window.onload = () => {
     chrome.storage.local.get().then((data) => {
         currentRequestText = "";
         requestList = [], respondList = [], requestLinesHeight = [], respondLinesHeight = [];
-        blockWebsite = [];
+        blockWebsite = [], blockUrl = [];
 
         if (checkDataAvailable(data.requestList, "Array")) requestList = data.requestList;
         if (checkDataAvailable(data.respondList, "Array")) respondList = data.respondList;
