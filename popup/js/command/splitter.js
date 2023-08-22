@@ -2,7 +2,8 @@ const handleCommand = async () => {
     let command = currentRequestText.trim().split(" ");
     
     if (command[0] == "clear" && command.length == 1) {
-        clear(); return;
+        clear(); 
+        return;
     }
 
     if (command[0] == "autoclear") {
@@ -22,7 +23,15 @@ const handleCommand = async () => {
     }
 
     if (command[0] == "block") {
+        if (command.length == 1) {
+            showBlockCommand();
+            return;
+        }
         if (command.length == 2) {
+            if (command[1][0] != '-') {
+                await blockSpecificWebsite();
+                return;
+            }
             if (command[1] == "-c" || command[1] == "-current") {
                 await blockCurrentWebsite();
                 return;

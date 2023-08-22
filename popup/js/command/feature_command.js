@@ -1,3 +1,31 @@
+const showBlockCommand = () => {
+    let respond = "* block -c\n-> block current website\n\n";
+    respond += "* block -s\n-> show all blocked website\n\n";
+    respond += "* block X\n-> block domain X, eg: block facebook.com";
+    addNewRespondLine(respond);
+}
+
+const blockSpecificWebsite = async (domain) => {
+    if (blockWebsite.includes(domain)) {
+        addNewRespondLine("This domain has been blocked before");
+        return;
+    }
+    
+    blockWebsite.push(domain);
+    await chrome.storage.local.set({"blockWebsite": blockWebsite});
+    await chrome.declarativeNetRequest.updateDynamicRules({
+        addRules:[{
+                "id": blockWebsite.length + 1,
+                "priority": 1,
+                "action": {"type": "block"},
+                "condition": {"urlFilter": domain, "resourceTypes": ["main_frame"]}}
+        ],
+        removeRuleIds: [blockWebsite.length + 1],
+    });
+
+    addNewRespondLine("Block success !!");
+} 
+
 const blockCurrentWebsite = async () => {
     const tabData = await chrome.tabs.query({'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT});
     console.log(tabData[0].url);
