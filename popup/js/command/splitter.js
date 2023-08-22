@@ -29,7 +29,7 @@ const handleCommand = async () => {
         }
         if (command.length == 2) {
             if (command[1][0] != '-') {
-                await blockSpecificWebsite();
+                await blockSpecificWebsite(command[1]);
                 return;
             }
             if (command[1] == "-c" || command[1] == "-current") {
