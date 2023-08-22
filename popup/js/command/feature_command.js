@@ -9,7 +9,7 @@ const fixUrl = (url) => {
 
 const showBlockCommand = () => {
     let respond = "* block -c\n-> block current website\n\n";
-    respond += "* block -s\n-> show all blocked website\n\n";
+    respond += "* block -s\n-> show all blocked websites\n\n";
     respond += "* block X\n-> block domain X, eg: block facebook.com";
     addNewRespondLine(respond);
 }
@@ -82,6 +82,14 @@ const showBlockWebsite = () => {
     }
     addNewRespondLine(respondText);
 } 
+
+const showUnblockCommand = () => {
+    let respond = "* unblock -s\n-> show all blocked websites \n\n";
+    respond += "* unblock -a\n-> unblock all websites\n\n";
+    respond += "* unblock X\n-> unblock domain X, eg: unblock fb.com\n\n";
+    respond += "* unblock ID\n-> unblock domain has index ID in blocked website list, eg: unblock 1";
+    addNewRespondLine(respond);
+}
 
 const isPositiveNumber = (value) => {
     return /^\d+$/.test(value);
@@ -156,7 +164,7 @@ const unblockAllWebsite = async () => {
 
 const showReloadCommands = () => {
     let respond = "* reload -c\n-> reload current website\n\n";
-    respond += "* reload -b\n-> reload all blocked website & url in tabs\n\n";
+    respond += "* reload -b\n-> reload all tabs & urls which blocked\n\n";
     respond += "* reload -a\n-> reload all tabs";
     addNewRespondLine(respond);
 }

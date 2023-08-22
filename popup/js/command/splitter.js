@@ -46,6 +46,10 @@ const handleCommand = async () => {
     }
 
     if (command[0] == "unblock") {
+        if (command.length == 1) {
+            showUnblockCommand();
+            return;
+        }
         if (command.length == 2) {
             if (command[1] == "-a" || command[1] == "-all") {
                 await unblockAllWebsite();
