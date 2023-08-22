@@ -152,16 +152,21 @@ const unblockSpecificWebsite = async (rawData) => {
         return;
     }
     let wwwUrl = "www." + url;
+    let nonwwwUrl = url.slice(4);
+
     let inBlockWebsite = 0;
     if (blockWebsite.includes(url)) inBlockWebsite = 1;
-    if (url.length >= 4 && url.substring(0, 3) && blockWebsite.includes(wwwUrl)) inBlockWebsite = 2;
+    if (url.substring(0, 4) !== "www." && blockWebsite.includes(wwwUrl)) inBlockWebsite = 2;
+    if (url.length >= 4 && url.substring(0, 4) === "www." && blockWebsite.includes(nonwwwUrl)) inBlockWebsite = 3;
 
     if (inBlockWebsite == 0) {
         addNewRespondLine(rawData + " isn't in your block website list");
         return;
     }
 
-    url = (inBlockWebsite == 1) ? url : wwwUrl; 
+    if (inBlockWebsite == 2) url = wwwUrl;
+    if (inBlockWebsite == 3) url = nonwwwUrl;
+     
     unblockWebsiteByDomain(url);
     addNewRespondLine("Unblock website " + url + " successfully");
 }
@@ -191,9 +196,18 @@ const reloadCurrentPage = async () => {
 const reloadBlockPage = async () => {
     const tabData = await chrome.tabs.query({});
     for (let i = 0; i < tabData.length; i ++) {
-        console.log(new URL(tabData[i].url).hostname.toString());
-        if (blockWebsite.includes(new URL(tabData[0].url).hostname.toString()) || blockUrl.includes(tabData[0].url).toString()) 
-            await chrome.tabs.reload(tabData[i].id);
+        let url = new URL(tabData[i].url).hostname.toString();
+        let wwwUrl = "www." + url; 
+        let nonwwwUrl = url.slice(4);
+
+        console.log(url + " " + wwwUrl + " " + nonwwwUrl);
+        if (blockWebsite.includes(url) 
+            || (url.substring(0, 4) !== "www." && blockWebsite.includes(wwwUrl))
+            || (url.length >= 4 && url.substring(0, 4) === "www." && blockWebsite.includes(nonwwwUrl))
+            || blockUrl.includes(url)
+            || (url.substring(0, 4) !== "www." && blockUrl.includes(wwwUrl))
+            || (url.length >= 4 && url.substring(0, 4) === "www." && blockUrl.includes(nonwwwUrl))
+        ) await chrome.tabs.reload(tabData[i].id);
     }
 
     addNewRespondLine("Blocked page reloaded");
