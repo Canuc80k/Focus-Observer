@@ -49,7 +49,10 @@ const unblockAllWebsite = async () => {
 }
 
 const showReloadCommands = () => {
-
+    let respond = "* reload -c\n-> reload current website\n\n";
+    respond += "* reload -b\n-> reload all blocked website & url in tabs\n\n";
+    respond += "* reload -a\n-> reload all tabs";
+    addNewRespondLine(respond);
 }
 
 const reloadCurrentPage = async () => {
