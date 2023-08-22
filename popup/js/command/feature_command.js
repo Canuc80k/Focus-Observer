@@ -1,3 +1,12 @@
+const BROKEN_URL = "!";
+
+const fixUrl = (url) => {
+    const dots = url.split(".").length - 1; 
+    if (dots == 0) return BROKEN_URL;
+    if (dots == 1) return "www." + url;
+    return url;
+}
+
 const showBlockCommand = () => {
     let respond = "* block -c\n-> block current website\n\n";
     respond += "* block -s\n-> show all blocked website\n\n";
@@ -6,6 +15,13 @@ const showBlockCommand = () => {
 }
 
 const blockSpecificWebsite = async (domain) => {
+    let _domain = domain;
+    domain = fixUrl(domain);
+    if (domain === BROKEN_URL) {
+        addNewRespondLine(_domain + " isn't valid");
+        return;
+    }
+
     if (blockWebsite.includes(domain)) {
         addNewRespondLine("This domain has been blocked before");
         return;
@@ -30,7 +46,8 @@ const blockCurrentWebsite = async () => {
     const tabData = await chrome.tabs.query({'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT});
     console.log(tabData[0].url);
     let domain = new URL(tabData[0].url).hostname;
-    
+    domain = fixUrl(domain);
+
     if (blockWebsite.includes(domain)) {
         addNewRespondLine("This domain has been blocked before");
         return;
@@ -100,6 +117,7 @@ const unblockSpecificWebsite = async (rawData) => {
         return;
     }
 
+    rawData = fixUrl(rawData);
     if (!blockWebsite.includes(rawData)) {
         addNewRespondLine(rawData + " isn't in your block website list");
         return;
