@@ -59,6 +59,10 @@ const handleCommand = async () => {
                 showBlockWebsite();
                 return;
             }
+            if (command[1] == "-c" || command[1] == "-current") {
+                await unblockCurrentWebsite();
+                return;
+            }
             if (command[1][0] != '-') {
                 await unblockSpecificWebsite(command[1]);
                 return;

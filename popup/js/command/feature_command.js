@@ -84,10 +84,37 @@ const showBlockWebsite = () => {
 
 const showUnblockCommand = () => {
     let respond = "* unblock -s\n-> show all blocked websites \n\n";
+    respond += "* unblock -c\n-> unblock current website\n\n";
     respond += "* unblock -a\n-> unblock all websites\n\n";
     respond += "* unblock X\n-> unblock domain X, eg: unblock fb.com\n\n";
     respond += "* unblock ID\n-> unblock domain has index ID in blocked website list, eg: unblock 1";
     addNewRespondLine(respond);
+}
+
+const unblockCurrentWebsite = async () => {
+    const tabData = await chrome.tabs.query({'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT});
+    let url = new URL(tabData[0].url).hostname;
+    url = fixUrl(url);
+
+    let wwwUrl = "www." + url;
+    let nonwwwUrl = url.slice(4);
+
+    let inBlockWebsite = 0;
+    if (blockWebsite.includes(url)) inBlockWebsite = 1;
+    if (url.substring(0, 4) !== "www." && blockWebsite.includes(wwwUrl)) inBlockWebsite = 2;
+    if (url.length >= 4 && url.substring(0, 4) === "www." && blockWebsite.includes(nonwwwUrl)) inBlockWebsite = 3;
+
+    if (inBlockWebsite == 0) {
+        addNewRespondLine(rawData + " isn't in your block website list");
+        return;
+    }
+
+    if (inBlockWebsite == 2) url = wwwUrl;
+    if (inBlockWebsite == 3) url = nonwwwUrl;
+     
+    await unblockWebsiteByDomain(url);
+    await chrome.tabs.reload();
+    addNewRespondLine("Unblock website " + url + " successfully");
 }
 
 const isPositiveNumber = (value) => {
@@ -167,7 +194,7 @@ const unblockSpecificWebsite = async (rawData) => {
     if (inBlockWebsite == 2) url = wwwUrl;
     if (inBlockWebsite == 3) url = nonwwwUrl;
      
-    unblockWebsiteByDomain(url);
+    await unblockWebsiteByDomain(url);
     addNewRespondLine("Unblock website " + url + " successfully");
 }
 
