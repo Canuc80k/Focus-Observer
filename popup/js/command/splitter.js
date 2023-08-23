@@ -1,4 +1,4 @@
-const handleCommand = async () => {
+const handleRequest = async () => {
     let command = currentRequestText.trim().split(" ");
     
     if (command[0] == "clear" && command.length == 1) {

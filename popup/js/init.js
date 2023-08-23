@@ -1,6 +1,6 @@
 let $console;
 let requestList, respondList, requestLinesHeight, respondLinesHeight, currentRequestText;
-let isAlreadyClearConsole = false;
+let inClearConsoleProgress = false;
 let autoClearConsoleLimit = Number.MAX_SAFE_INTEGER;
 let blockWebsite, blockUrl;
 
@@ -14,7 +14,6 @@ const autoClearExecute = () => {
         requestList = [], respondList = [], requestLinesHeight = [], respondLinesHeight = [];
         return;
     }
-    
     if (requestList.length > autoClearConsoleLimit) {
         requestList = requestList.slice(- autoClearConsoleLimit);
         respondList = respondList.slice(- autoClearConsoleLimit);
@@ -38,13 +37,6 @@ window.onload = () => {
         if (checkDataAvailable(data.autoClearConsoleLimit, "Number")) autoClearConsoleLimit = data.autoClearConsoleLimit;
         if (checkDataAvailable(data.blockWebsite, "Array")) blockWebsite = data.blockWebsite;
         autoClearExecute();
-
-        console.log(requestList);
-        console.log(respondList);
-        console.log(requestLinesHeight);
-        console.log(respondLinesHeight);
-        console.log(currentRequestText);
-        console.log(blockWebsite);
 
         if (requestList.length) buildOldGUI();
         addCurrentRequestLine(currentRequestText);

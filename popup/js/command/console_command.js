@@ -3,13 +3,13 @@ const clear = () => {
     requestList = [], respondList = [], requestLinesHeight = [], respondLinesHeight = [];
 
     $console.html("");
-    isAlreadyClearConsole = true;
+    inClearConsoleProgress = true;
 }
 
 const showAutoClearCommand = () => {
-    let respond = "* autoclear -s\n-> log current auto clear limit\n\n";
-    respond += "* autoclear -d\n-> set auto clear limit to default\n\n";
-    respond += "* autoclear X\n-> set auto clear limit to X";
+    let respond = "* autoclear -s: log current auto clear limit\n\n";
+    respond += "* autoclear -d: set auto clear limit to default\n\n";
+    respond += "* autoclear X: set auto clear limit to X";
     addNewRespondLine(respond);
 }
 

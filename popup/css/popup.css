@@ -1,11 +1,10 @@
 :root {
     --width: 21rem;
     --height: 25rem;
-    --fsz: 1.3rem;
+    --fsz: 1.5rem;
 }
 
 html {
-    /* background: #232627; */
     background: black;
     height: var(--height);
     width: var(--width);
@@ -29,11 +28,11 @@ html {
     color: white;
     font-family: 'Ubuntu', sans-serif;
     font-size: 1rem;
-    padding-top: 0.25rem;
+    padding-top: 0.2rem;
 }
 
 .console-text {
-    width: 17rem;
+    width: 18rem;
     height: var(--fsz);
 
     color: #1fd655;
@@ -49,7 +48,8 @@ html {
 }
 
 .respond-console-text {
-    width: 17rem;
+    margin: 0.5rem;
+    width: 18rem;
     height: var(--fsz);
 
     color: #ea5252;
