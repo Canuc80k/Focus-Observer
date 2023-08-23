@@ -10,16 +10,16 @@ const countTextareaLine = (textarea) => {
     return result;
 }
 
-const createRequestLine = (id) => {
+const getRequestLineInstance = (id) => {
     return "<div class=\"console-line\"><div class=\"console-begin-char\">&gt;&nbsp;&nbsp;</div><textarea id=\"" + id + "\" class=\"console-text\"></textarea></div>";
 }
 
-const createRespondLine = (id) => {
+const getRespondLineInstance = (id) => {
     return "<div class=\"console-line\"><textarea id=\"r" + id + "\" class=\"respond-console-text\" readonly=\"true\"></textarea></div>";
 }
 
 const addOldRequestLine = (id, text, height) => {
-    $console.append(createRequestLine(id));
+    $console.append(getRequestLineInstance(id));
     let $resquestLine = $("#" + id);
     $resquestLine.prop('readonly', true);
     $resquestLine.text(text);
@@ -27,7 +27,7 @@ const addOldRequestLine = (id, text, height) => {
 }
 
 const addOldRespondLine = (id, text, height) => {
-    $console.append(createRespondLine(id));
+    $console.append(getRespondLineInstance(id));
     let $respondLine = $("#r" + id);
     $respondLine.text(text);
     $respondLine.css("height", height + "rem");
@@ -42,7 +42,7 @@ const buildOldGUI = () => {
 
 const addNewRequestLine = () => {
     let newID = requestList.length;
-    $console.append(createRequestLine(newID));
+    $console.append(getRequestLineInstance(newID));
     let $requestLine = $("#" + newID);
     
     $requestLine.focus();
@@ -55,7 +55,7 @@ const addNewRequestLine = () => {
 
 const addNewRespondLine = (text) => {
     let newID = respondList.length;
-    $console.append(createRespondLine(newID));
+    $console.append(getRespondLineInstance(newID));
     let $respondLine = $("#r" + newID);
     $respondLine.prop('readonly', true);
     $respondLine.val(text);
@@ -64,7 +64,7 @@ const addNewRespondLine = (text) => {
 }
 
 const addCurrentRequestLine = (text) => {
-    $console.append(createRequestLine(requestList.length));
+    $console.append(getRequestLineInstance(requestList.length));
     let $currRequestLine = $("#" + requestList.length);
     $currRequestLine.focus();
     $currRequestLine.val(text); 
@@ -77,7 +77,10 @@ const addCurrentRequestLine = (text) => {
 }
 
 const archiveLastConsoleLine = () => {
-    if (inClearConsoleProgress) return;
+    if (inClearConsoleProgress) {
+        inClearConsoleProgress = false;
+        return;
+    }
 
     currentRequestText = "";
     let requestID = requestList.length;
