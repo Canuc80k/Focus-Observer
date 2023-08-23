@@ -1,12 +1,22 @@
+:root {
+    --width: 21rem;
+    --height: 25rem;
+    --fsz: 1.3rem;
+}
+
 html {
-    background: #232627;
-    height: 20rem;
-    width: 16rem;
+    /* background: #232627; */
+    background: black;
+    height: var(--height);
+    width: var(--width);
 }
 
 #console {
-    max-height: 19rem;
+    max-height: 23.5rem;
     overflow: auto;
+    width: 19.5rem;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #console::-webkit-scrollbar {
@@ -18,18 +28,18 @@ html {
     display: inline-block;
     color: white;
     font-family: 'Ubuntu', sans-serif;
-    font-size: 0.75rem;
+    font-size: 1rem;
     padding-top: 0.25rem;
 }
 
 .console-text {
-    width: 12rem;
-    height: 1.2rem;
+    width: 17rem;
+    height: var(--fsz);
 
-    color: #188d77;
+    color: #1fd655;
     font-family: 'VT323', monospace;
-    font-size: 1.2rem;
-    background-color: #232627;
+    font-size: var(--fsz);
+    background-color: black;
 
     outline: none;
     border: none;
@@ -39,13 +49,13 @@ html {
 }
 
 .respond-console-text {
-    width: 12rem;
-    height: 1.2rem;
+    width: 17rem;
+    height: var(--fsz);
 
-    color: #962a2a;
+    color: #ea5252;
     font-family: 'VT323', monospace;
-    font-size: 1.2rem;
-    background-color: #232627;
+    font-size: var(--fsz);
+    background-color: black;
 
     outline: none;
     border: none;

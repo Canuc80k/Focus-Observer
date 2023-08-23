@@ -1,4 +1,4 @@
-let fontSize = 1.2;
+let fontSize = 1.3;
 
 const countTextareaLine = (textarea) => {
     let cs = window.getComputedStyle(textarea);

@@ -105,7 +105,7 @@ const unblockCurrentWebsite = async () => {
     if (url.length >= 4 && url.substring(0, 4) === "www." && blockWebsite.includes(nonwwwUrl)) inBlockWebsite = 3;
 
     if (inBlockWebsite == 0) {
-        addNewRespondLine(rawData + " isn't in your block website list");
+        addNewRespondLine(url + " isn't in your block website list");
         return;
     }
 
