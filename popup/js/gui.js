@@ -51,6 +51,15 @@ const addNewRequestLine = () => {
         currentRequestText = $requestLine.val();
         chrome.storage.local.set({"currentRequestText": currentRequestText}, () => {});
     });
+    $requestLine.keydown((e) => {
+        if (e.which == 38) {
+            e.preventDefault();
+            if (!requestList.length) return; 
+            currentRequestText = requestList[requestList.length - 1];
+            chrome.storage.local.set({"currentRequestText": currentRequestText}, () => {});
+            $requestLine.val(currentRequestText);
+        }
+    });
 }
 
 const addNewRespondLine = (text) => {
@@ -73,6 +82,15 @@ const addCurrentRequestLine = (text) => {
         currentRequestText = $currRequestLine.val();
         chrome.storage.local.set({"currentRequestText": currentRequestText}, () => {});
         $currRequestLine.css("height", countTextareaLine(e.target) * fontSize + "rem");
+    });
+    $currRequestLine.keydown((e) => {
+        if (e.which == 38) {
+            e.preventDefault();
+            if (!requestList.length) return; 
+            currentRequestText = requestList[requestList.length - 1];
+            chrome.storage.local.set({"currentRequestText": currentRequestText}, () => {});
+            $currRequestLine.val(currentRequestText);
+        }
     });
 }
 
@@ -117,7 +135,3 @@ $(document).on('keypress', async (e) => {
         addNewRequestLine();
     }
 });
-
-// $(document).on('keypress', async (e) => {
-//     console.log(e.originalEvent);
-// });
