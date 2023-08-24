@@ -11,10 +11,10 @@ const askForConfirm = async () => {
     return (promise == "y");
 }
 
-const waitingForAnswer = () => {
+const waitingForAnswer = async () => {
     return new Promise((resolve, reject) => {
-        $(document).on('keypress', async (e) => {
-            console.log(e.which);
+        $("#r" + respondList.length).on('keypress', (e) => {
+            e.preventDefault();
             if (e.which == 89) resolve("y");
             if (e.which == 78) resolve("n");
             resolve("else");
