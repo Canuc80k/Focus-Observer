@@ -38,6 +38,12 @@ window.onload = () => {
         if (checkDataAvailable(data.blockWebsite, "Array")) blockWebsite = data.blockWebsite;
         autoClearExecute();
 
+        console.log(requestList);
+        console.log(respondList);
+        console.log(requestLinesHeight);
+        console.log(respondLinesHeight);
+        console.log(blockWebsite);
+        
         if (requestList.length) buildOldGUI();
         addCurrentRequestLine(currentRequestText);
     });

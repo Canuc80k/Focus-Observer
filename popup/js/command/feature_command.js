@@ -43,9 +43,12 @@ const blockSpecificWebsite = async (domain) => {
 
 const blockCurrentWebsite = async () => {
     const tabData = await chrome.tabs.query({'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT});
-    console.log(tabData[0].url);
-    let domain = new URL(tabData[0].url).hostname;
-    domain = fixUrl(domain);
+    let _domain = new URL(tabData[0].url).hostname;
+    domain = fixUrl(_domain);
+    if (domain === BROKEN_URL) {
+        addNewRespondLine(_domain + " isn't valid");
+        return;
+    }
 
     if (blockWebsite.includes(domain)) {
         addNewRespondLine("This domain has been blocked before");

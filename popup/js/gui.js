@@ -1,6 +1,8 @@
 let fontSize = parseFloat(window.getComputedStyle(document.documentElement).getPropertyValue('--fsz'));
 
 const countTextareaLine = (textarea) => {
+    if (textarea == undefined) return 0;
+
     let cs = window.getComputedStyle(textarea);
     let lh = parseInt(cs.lineHeight);
     if (isNaN(lh)) lh = parseInt(cs.fontSize);
@@ -68,7 +70,6 @@ const addNewRespondLine = (text) => {
     let $respondLine = $("#r" + newID);
     $respondLine.prop('readonly', true);
     $respondLine.val(text);
-
     $respondLine.css("height", countTextareaLine($respondLine.get(0)) * fontSize + "rem");
 }
 

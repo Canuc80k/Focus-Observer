@@ -2,7 +2,8 @@ const handleRequest = async () => {
     let command = currentRequestText.trim().split(" ");
     
     if (command[0] == "clear" && command.length == 1) {
-        clear(); 
+        if (await askForConfirm()) clear();
+        else addNewRespondLine("unsuccessful");
         return;
     }
 
