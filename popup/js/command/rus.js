@@ -12,12 +12,11 @@ const askForConfirm = async () => {
 }
 
 const waitingForAnswer = async () => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         $("#r" + respondList.length).on('keypress', (e) => {
             e.preventDefault();
-            if (e.which == 89) resolve("y");
-            if (e.which == 78) resolve("n");
-            resolve("else");
+            if (e.which == 89 || e.which == 121) resolve("y");
+            if (e.which == 78 || e.which == 110) resolve("n");
         });
     });
 }
