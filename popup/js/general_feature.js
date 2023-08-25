@@ -18,3 +18,23 @@ const addJumpToPreviousRequestLineEvent = () => {
         }
     });
 }
+
+const addJumpToNextRequestLineEvent = () => {
+    let id = requestList.length;
+    let $requestLine = $("#" + id);
+    
+    $requestLine.keydown((e) => {
+        if (e.which == 40) {
+            e.preventDefault();
+            if (!requestList.length) return;
+            if (requestLinePointer == -1 || requestLinePointer == requestList.length - 1) return;
+
+            let prevID = requestLinePointer + 1;
+            requestLinePointer = prevID;
+
+            currentRequestText = requestList[prevID];
+            chrome.storage.local.set({"currentRequestText": currentRequestText}, () => {});
+            $requestLine.val(currentRequestText);
+        }
+    });
+}

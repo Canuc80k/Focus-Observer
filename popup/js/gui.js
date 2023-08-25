@@ -55,6 +55,7 @@ const addNewRequestLine = () => {
         requestLinePointer = -1;
     });
     addJumpToPreviousRequestLineEvent();
+    addJumpToNextRequestLineEvent();
 }
 
 const addNewRespondLine = (text) => {
@@ -78,6 +79,7 @@ const addCurrentRequestLine = (text) => {
         $currRequestLine.css("height", countTextareaLine(e.target) * fontSize + "rem");
     });
     addJumpToPreviousRequestLineEvent();
+    addJumpToNextRequestLineEvent();
 }
 
 const archiveLastConsoleLine = () => {
