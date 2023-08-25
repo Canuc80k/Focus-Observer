@@ -52,16 +52,9 @@ const addNewRequestLine = () => {
         $requestLine.css("height", countTextareaLine(e.target) * fontSize + "rem");
         currentRequestText = $requestLine.val();
         chrome.storage.local.set({"currentRequestText": currentRequestText}, () => {});
+        requestLinePointer = -1;
     });
-    $requestLine.keydown((e) => {
-        if (e.which == 38) {
-            e.preventDefault();
-            if (!requestList.length) return; 
-            currentRequestText = requestList[requestList.length - 1];
-            chrome.storage.local.set({"currentRequestText": currentRequestText}, () => {});
-            $requestLine.val(currentRequestText);
-        }
-    });
+    addJumpToPreviousRequestLineEvent();
 }
 
 const addNewRespondLine = (text) => {
@@ -84,15 +77,7 @@ const addCurrentRequestLine = (text) => {
         chrome.storage.local.set({"currentRequestText": currentRequestText}, () => {});
         $currRequestLine.css("height", countTextareaLine(e.target) * fontSize + "rem");
     });
-    $currRequestLine.keydown((e) => {
-        if (e.which == 38) {
-            e.preventDefault();
-            if (!requestList.length) return; 
-            currentRequestText = requestList[requestList.length - 1];
-            chrome.storage.local.set({"currentRequestText": currentRequestText}, () => {});
-            $currRequestLine.val(currentRequestText);
-        }
-    });
+    addJumpToPreviousRequestLineEvent();
 }
 
 const archiveLastConsoleLine = () => {
@@ -118,6 +103,7 @@ const archiveLastConsoleLine = () => {
 
 const updateLastConsoleLineToStorage = async () => {
     archiveLastConsoleLine();
+    requestLinePointer = -1;
     await chrome.storage.local.set({
         "requestList": requestList, 
         "respondList": respondList,

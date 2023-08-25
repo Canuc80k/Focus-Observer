@@ -3,6 +3,7 @@ let requestList, respondList, requestLinesHeight, respondLinesHeight, currentReq
 let inClearConsoleProgress = false;
 let autoClearConsoleLimit = Number.MAX_SAFE_INTEGER;
 let blockWebsite, blockUrl;
+let requestLinePointer = -1;
 
 const checkDataAvailable = (data, dataType) => {
     if (data != undefined && data.constructor.name == dataType) return true;
