@@ -1,6 +1,6 @@
 let $console;
 let requestList, respondList, requestLinesHeight, respondLinesHeight, currentRequestText;
-let inClearConsoleProgress = false;
+let inClearConsoleProgress = false, isWaitingForConfirm = false;
 let autoClearConsoleLimit = Number.MAX_SAFE_INTEGER;
 let blockWebsite, blockUrl;
 let requestLinePointer = -1;

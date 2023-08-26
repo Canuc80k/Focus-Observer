@@ -119,6 +119,8 @@ const updateLastConsoleLineToStorage = async () => {
 $(document).on('keypress', async (e) => {
     if (e.which == 13) {
         e.preventDefault();
+        if (isWaitingForConfirm) return;
+        
         await handleRequest();
         await updateLastConsoleLineToStorage();
         addNewRequestLine();
