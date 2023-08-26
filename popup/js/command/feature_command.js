@@ -13,6 +13,18 @@ const showBlockCommand = () => {
     addNewRespondLine(respond);
 }
 
+const addBlockRule = async (id, domain) => {
+    await chrome.declarativeNetRequest.updateDynamicRules({
+        addRules:[{
+                "id": id,
+                "priority": 1,
+                "action": {"type": "block"},
+                "condition": {"regexFilter": "^(http:\/\/|https:\/\/)?([a-z0-9]+\.)*" + domain, "resourceTypes": ["main_frame"]}}
+        ],
+        removeRuleIds: [id],
+    });
+}
+
 const blockSpecificWebsite = async (domain) => {
     let _domain = domain;
     domain = fixUrl(domain);
@@ -28,15 +40,7 @@ const blockSpecificWebsite = async (domain) => {
     
     blockWebsite.push(domain);
     await chrome.storage.local.set({"blockWebsite": blockWebsite});
-    await chrome.declarativeNetRequest.updateDynamicRules({
-        addRules:[{
-                "id": blockWebsite.length + 1,
-                "priority": 1,
-                "action": {"type": "block"},
-                "condition": {"urlFilter": domain, "resourceTypes": ["main_frame"]}}
-        ],
-        removeRuleIds: [blockWebsite.length + 1],
-    });
+    await addBlockRule(blockWebsite.length + 1, domain);
 
     addNewRespondLine("Block success !!");
 } 
@@ -44,7 +48,7 @@ const blockSpecificWebsite = async (domain) => {
 const blockCurrentWebsite = async () => {
     const tabData = await chrome.tabs.query({'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT});
     let _domain = new URL(tabData[0].url).hostname;
-    domain = fixUrl(_domain);
+    let domain = fixUrl(_domain);
     if (domain === BROKEN_URL) {
         addNewRespondLine(_domain + " isn't valid");
         return;
@@ -57,15 +61,7 @@ const blockCurrentWebsite = async () => {
     
     blockWebsite.push(domain);
     await chrome.storage.local.set({"blockWebsite": blockWebsite});
-    await chrome.declarativeNetRequest.updateDynamicRules({
-        addRules:[{
-                "id": blockWebsite.length + 1,
-                "priority": 1,
-                "action": {"type": "block"},
-                "condition": {"urlFilter": domain, "resourceTypes": ["main_frame"]}}
-        ],
-        removeRuleIds: [blockWebsite.length + 1],
-    });
+    await addBlockRule(blockWebsite.length + 1, domain);
 
     await chrome.tabs.reload();
     addNewRespondLine("Block success !!");
@@ -133,15 +129,7 @@ const unblockWebsiteByIndex = async (id) => {
     await chrome.declarativeNetRequest.updateDynamicRules({removeRuleIds: previousRuleIds});
 
     for (let i = 0; i < blockWebsite.length; i ++)
-        await chrome.declarativeNetRequest.updateDynamicRules({
-            addRules:[{
-                "id": i + 1,
-                "priority": 1,
-                "action": {"type": "block"},
-                "condition": {"urlFilter": blockWebsite[i], "resourceTypes": ["main_frame"]}}
-            ],
-            removeRuleIds: [i + 1],
-        });
+        await addBlockRule(i + 1, blockWebsite[i]);
 }
 
 const unblockWebsiteByDomain = async (domain) => {
@@ -153,15 +141,7 @@ const unblockWebsiteByDomain = async (domain) => {
     await chrome.declarativeNetRequest.updateDynamicRules({removeRuleIds: previousRuleIds});
 
     for (let i = 0; i < blockWebsite.length; i ++)
-        await chrome.declarativeNetRequest.updateDynamicRules({
-            addRules:[{
-                "id": i + 1,
-                "priority": 1,
-                "action": {"type": "block"},
-                "condition": {"urlFilter": blockWebsite[i], "resourceTypes": ["main_frame"]}}
-            ],
-            removeRuleIds: [i + 1],
-        });
+        await addBlockRule(i + 1, blockWebsite[i]);
 }
 
 const unblockSpecificWebsite = async (rawData) => {
