@@ -16,10 +16,10 @@ const autoClearExecute = () => {
         return;
     }
     if (requestList.length > autoClearConsoleLimit) {
-        requestList = requestList.slice(- autoClearConsoleLimit);
-        respondList = respondList.slice(- autoClearConsoleLimit);
-        requestLinesHeight = requestLinesHeight.slice(- autoClearConsoleLimit);
-        respondLinesHeight = respondLinesHeight.slice(- autoClearConsoleLimit);
+        requestList = requestList.slice(-autoClearConsoleLimit);
+        respondList = respondList.slice(-autoClearConsoleLimit);
+        requestLinesHeight = requestLinesHeight.slice(-autoClearConsoleLimit);
+        respondLinesHeight = respondLinesHeight.slice(-autoClearConsoleLimit);
     }
 }
 

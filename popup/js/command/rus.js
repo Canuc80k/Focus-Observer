@@ -1,16 +1,17 @@
 const askForConfirm = async () => {
     addNewRespondLine("Are u sure [Y/N]:");
-    isWaitingForConfirm = true;
     let respondID = respondList.length; 
+    isWaitingForConfirm = true;
     $rusLine = $("#r" + respondID);
-    $("#" + requestList.length).prop("readonly", true); 
     $rusLine.prop('readonly', false);
     $rusLine.focus();
+    $("#" + requestList.length).prop("readonly", true); 
     const promise = await waitingForAnswer();
+
     $("#r" + respondList.length).remove();
+    isWaitingForConfirm = false;
     $rusLine.prop('readonly', true);
     $rusLine.blur();
-    isWaitingForConfirm = false;
     return (promise == "y");
 }
 

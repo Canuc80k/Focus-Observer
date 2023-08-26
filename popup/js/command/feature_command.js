@@ -1,6 +1,12 @@
 const BROKEN_URL = "!";
 
 const fixUrl = (url) => {
+    console.log(url);
+    if (url.length > 7 && url.substring(0, 7) === "http://") url = url.slice(7);
+    if (url.length > 8 && url.substring(0, 8) === "https://") url = url.slice(8);
+    if (url.length > 4 && url.substring(0, 4) === "www.") url = url.slice(4);
+    console.log(url);
+
     const dots = url.split(".").length - 1; 
     if (dots == 0) return BROKEN_URL;
     return url;
@@ -16,10 +22,10 @@ const showBlockCommand = () => {
 const addBlockRule = async (id, domain) => {
     await chrome.declarativeNetRequest.updateDynamicRules({
         addRules:[{
-                "id": id,
-                "priority": 1,
-                "action": {"type": "block"},
-                "condition": {"regexFilter": "^(http:\/\/|https:\/\/)?([a-z0-9]+\.)*" + domain, "resourceTypes": ["main_frame"]}}
+            "id": id,
+            "priority": 1,
+            "action": {"type": "block"},
+            "condition": {"regexFilter": "^(http:\/\/|https:\/\/)?([a-z0-9]+\.)*" + domain, "resourceTypes": ["main_frame"]}}
         ],
         removeRuleIds: [id],
     });
@@ -32,16 +38,13 @@ const blockSpecificWebsite = async (domain) => {
         addNewRespondLine(_domain + " isn't valid");
         return;
     }
-
     if (blockWebsite.includes(domain)) {
         addNewRespondLine("This domain has been blocked before");
         return;
     }
-    
     blockWebsite.push(domain);
     await chrome.storage.local.set({"blockWebsite": blockWebsite});
     await addBlockRule(blockWebsite.length + 1, domain);
-
     addNewRespondLine("Block success !!");
 } 
 
@@ -53,16 +56,13 @@ const blockCurrentWebsite = async () => {
         addNewRespondLine(_domain + " isn't valid");
         return;
     }
-
     if (blockWebsite.includes(domain)) {
         addNewRespondLine("This domain has been blocked before");
         return;
     }
-    
     blockWebsite.push(domain);
     await chrome.storage.local.set({"blockWebsite": blockWebsite});
     await addBlockRule(blockWebsite.length + 1, domain);
-
     await chrome.tabs.reload();
     addNewRespondLine("Block success !!");
 }
@@ -72,7 +72,6 @@ const showBlockWebsite = () => {
         addNewRespondLine("U haven't blocked anything yet");
         return;
     }
-
     let respondText = "";
     for (let i = 0; i < blockWebsite.length; i ++) {
         respondText += (i + 1) + ". " + blockWebsite[i];
@@ -95,22 +94,10 @@ const unblockCurrentWebsite = async () => {
     let url = new URL(tabData[0].url).hostname;
     url = fixUrl(url);
 
-    let wwwUrl = "www." + url;
-    let nonwwwUrl = url.slice(4);
-
-    let inBlockWebsite = 0;
-    if (blockWebsite.includes(url)) inBlockWebsite = 1;
-    if (url.substring(0, 4) !== "www." && blockWebsite.includes(wwwUrl)) inBlockWebsite = 2;
-    if (url.length >= 4 && url.substring(0, 4) === "www." && blockWebsite.includes(nonwwwUrl)) inBlockWebsite = 3;
-
-    if (inBlockWebsite == 0) {
+    if (!blockWebsite.includes(url)) {
         addNewRespondLine(url + " isn't in your block website list");
         return;
-    }
-
-    if (inBlockWebsite == 2) url = wwwUrl;
-    if (inBlockWebsite == 3) url = nonwwwUrl;
-     
+    } 
     await unblockWebsiteByDomain(url);
     await chrome.tabs.reload();
     addNewRespondLine("Unblock website " + url + " successfully");
@@ -150,7 +137,6 @@ const unblockSpecificWebsite = async (rawData) => {
             addNewRespondLine("Blocked website with index " + rawData + " doesn't exit");
             return;
         }
-
         unblockWebsiteByIndex(rawData - 1);
         addNewRespondLine("Unblock website with index " + rawData + " successfully");
         return;
@@ -161,22 +147,10 @@ const unblockSpecificWebsite = async (rawData) => {
         addNewRespondLine(rawData + " isn't valid");
         return;
     }
-    let wwwUrl = "www." + url;
-    let nonwwwUrl = url.slice(4);
-
-    let inBlockWebsite = 0;
-    if (blockWebsite.includes(url)) inBlockWebsite = 1;
-    if (url.substring(0, 4) !== "www." && blockWebsite.includes(wwwUrl)) inBlockWebsite = 2;
-    if (url.length >= 4 && url.substring(0, 4) === "www." && blockWebsite.includes(nonwwwUrl)) inBlockWebsite = 3;
-
-    if (inBlockWebsite == 0) {
+    if (!blockWebsite.includes(url)) {
         addNewRespondLine(rawData + " isn't in your block website list");
         return;
     }
-
-    if (inBlockWebsite == 2) url = wwwUrl;
-    if (inBlockWebsite == 3) url = nonwwwUrl;
-     
     await unblockWebsiteByDomain(url);
     addNewRespondLine("Unblock website " + url + " successfully");
 }
@@ -187,7 +161,6 @@ const unblockAllWebsite = async () => {
     await chrome.declarativeNetRequest.updateDynamicRules({removeRuleIds: previousRuleIds});
     blockWebsite = [];
     await chrome.storage.local.set({"blockWebsite": blockWebsite});
-
     addNewRespondLine("Unblock all website");
 }
 
@@ -207,26 +180,16 @@ const reloadBlockPage = async () => {
     const tabData = await chrome.tabs.query({});
     for (let i = 0; i < tabData.length; i ++) {
         let url = new URL(tabData[i].url).hostname.toString();
-        let wwwUrl = "www." + url; 
-        let nonwwwUrl = url.slice(4);
-
-        console.log(url + " " + wwwUrl + " " + nonwwwUrl);
-        if (blockWebsite.includes(url) 
-            || (url.substring(0, 4) !== "www." && blockWebsite.includes(wwwUrl))
-            || (url.length >= 4 && url.substring(0, 4) === "www." && blockWebsite.includes(nonwwwUrl))
-            || blockUrl.includes(url)
-            || (url.substring(0, 4) !== "www." && blockUrl.includes(wwwUrl))
-            || (url.length >= 4 && url.substring(0, 4) === "www." && blockUrl.includes(nonwwwUrl))
-        ) await chrome.tabs.reload(tabData[i].id);
+        url = fixUrl(url);
+        if (blockWebsite.includes(url)) 
+            await chrome.tabs.reload(tabData[i].id);
     }
-
     addNewRespondLine("Blocked page reloaded");
 }
 
 const reloadAllPage = async () => {
     const tabData = await chrome.tabs.query({});
     for (let i = 0; i < tabData.length; i ++) 
-        await chrome.tabs.reload(tabData[i].id);
-    
+        await chrome.tabs.reload(tabData[i].id);   
     addNewRespondLine("All page reloaded");
 }
